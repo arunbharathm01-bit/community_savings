@@ -1,0 +1,274 @@
+{
+	"info": {
+		"_postman_id": "community-savings-api-collection",
+		"name": "Community Savings Management API",
+		"description": "Postman API Collection for Community Savings & Loan Management System MVP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sync Firebase User to DB",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Arun Kumar\",\n  \"email\": \"leader@test.com\",\n  \"photo\": \"https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/auth/sync", "host": ["{{baseUrl}}"], "path": ["api", "auth", "sync"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get All Members",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/members", "host": ["{{baseUrl}}"], "path": ["api", "members"] }
+					}
+				},
+				{
+					"name": "Promote / Demote Member Role",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"CO_LEADER\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/members/:id/role", "host": ["{{baseUrl}}"], "path": ["api", "members", ":id", "role"], "variable": [{ "key": "id", "value": "member_user_id" }] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Weekly Collection",
+			"item": [
+				{
+					"name": "Get Current Week Collection Status",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/collection", "host": ["{{baseUrl}}"], "path": ["api", "collection"] }
+					}
+				},
+				{
+					"name": "Mark Weekly Payment as Paid",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentId\": \"weekly_payment_id\",\n  \"status\": \"PAID\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/collection/pay", "host": ["{{baseUrl}}"], "path": ["api", "collection", "pay"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Get Transaction Statement",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/transactions?type=WEEKLY_DEPOSIT&month=8&year=2026", "host": ["{{baseUrl}}"], "path": ["api", "transactions"], "query": [{ "key": "type", "value": "WEEKLY_DEPOSIT" }, { "key": "month", "value": "8" }, { "key": "year", "value": "2026" }] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Loans",
+			"item": [
+				{
+					"name": "Get Loans List",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/loans", "host": ["{{baseUrl}}"], "path": ["api", "loans"] }
+					}
+				},
+				{
+					"name": "Request New Loan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 1500,\n  \"reason\": \"Medical emergency\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/loans", "host": ["{{baseUrl}}"], "path": ["api", "loans"] }
+					}
+				},
+				{
+					"name": "Leader Approve / Reject Loan",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"approved\": true,\n  \"approvedAmount\": 1000\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/loans/:id/approve", "host": ["{{baseUrl}}"], "path": ["api", "loans", ":id", "approve"], "variable": [{ "key": "id", "value": "loan_id" }] }
+					}
+				},
+				{
+					"name": "Loan Repayment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 500\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/loans/:id/repay", "host": ["{{baseUrl}}"], "path": ["api", "loans", ":id", "repay"], "variable": [{ "key": "id", "value": "loan_id" }] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Announcements",
+			"item": [
+				{
+					"name": "Get All Announcements",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/announcements", "host": ["{{baseUrl}}"], "path": ["api", "announcements"] }
+					}
+				},
+				{
+					"name": "Create Announcement (Leader/Co-Leader)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Festival Celebration 🎉\",\n  \"content\": \"Everyone come before 8AM. Venue Temple.\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/announcements", "host": ["{{baseUrl}}"], "path": ["api", "announcements"] }
+					}
+				},
+				{
+					"name": "Toggle Heart / Like",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/announcements/:id/like", "host": ["{{baseUrl}}"], "path": ["api", "announcements", ":id", "like"], "variable": [{ "key": "id", "value": "announcement_id" }] }
+					}
+				},
+				{
+					"name": "Add Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Will be there on time! ❤️\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/announcements/:id/comment", "host": ["{{baseUrl}}"], "path": ["api", "announcements", ":id", "comment"], "variable": [{ "key": "id", "value": "announcement_id" }] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Google Pay & Dues",
+			"item": [
+				{
+					"name": "Get User Dues",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/dues", "host": ["{{baseUrl}}"], "path": ["api", "dues"] }
+					}
+				},
+				{
+					"name": "Create Razorpay / Google Pay Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentId\": \"weekly_payment_id\",\n  \"amount\": 5000\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/payments/create-order", "host": ["{{baseUrl}}"], "path": ["api", "payments", "create-order"] }
+					}
+				},
+				{
+					"name": "Verify Payment Signature",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentId\": \"weekly_payment_id\",\n  \"razorpay_order_id\": \"order_xxx\",\n  \"razorpay_payment_id\": \"pay_xxx\",\n  \"razorpay_signature\": \"sig_xxx\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/payments/verify", "host": ["{{baseUrl}}"], "path": ["api", "payments", "verify"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin Dashboard",
+			"item": [
+				{
+					"name": "Get Admin Stats & Charts",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{FIREBASE_ID_TOKEN}}" }],
+						"url": { "raw": "{{baseUrl}}/api/admin/stats?full=true", "host": ["{{baseUrl}}"], "path": ["api", "admin", "stats"], "query": [{ "key": "full", "value": "true" }] }
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "FIREBASE_ID_TOKEN",
+			"value": "your_firebase_bearer_id_token_here"
+		}
+	]
+}

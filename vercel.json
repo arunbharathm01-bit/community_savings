@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/weekly-reminder",
+      "schedule": "30 2 * * 6"
+    },
+    {
+      "path": "/api/cron/mark-late",
+      "schedule": "30 0 * * 1"
+    }
+  ]
+}

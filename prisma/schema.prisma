@@ -1,0 +1,218 @@
+// Prisma Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum Role {
+  LEADER
+  CO_LEADER
+  MANAGER
+  MEMBER
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  LATE
+}
+
+enum LoanStatus {
+  REQUESTED
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+}
+
+enum TransactionType {
+  WEEKLY_DEPOSIT
+  FINE
+  LOAN_DISBURSED
+  LOAN_REPAYMENT
+  INTEREST
+  ADJUSTMENT
+}
+
+enum NotificationType {
+  PAYMENT_DUE
+  PAYMENT_RECEIVED
+  FINE_APPLIED
+  LOAN_REQUESTED
+  LOAN_APPROVED
+  LOAN_REJECTED
+  ANNOUNCEMENT
+  GENERAL
+}
+
+// ─────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────
+
+model User {
+  id              String   @id @default(cuid())
+  firebaseUid     String   @unique
+  name            String
+  email           String   @unique
+  phone           String?
+  photo           String?
+  role            Role     @default(MEMBER)
+  joinDate        DateTime @default(now())
+  isVerified      Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  weeklyPayments  WeeklyPayment[]
+  loans           Loan[]
+  transactions    Transaction[]
+  announcements   Announcement[]
+  comments        Comment[]
+  likes           Like[]
+  notifications   Notification[]
+  loanApprovals   Loan[]          @relation("LoanApprovedBy")
+
+  @@map("users")
+}
+
+model WeeklyPayment {
+  id         String        @id @default(cuid())
+  userId     String
+  weekStart  DateTime
+  amount     Float
+  status     PaymentStatus @default(PENDING)
+  fine       Float         @default(0)
+  paidAt     DateTime?
+  paymentRef String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  user       User          @relation(fields: [userId], references: [id])
+
+  @@unique([userId, weekStart])
+  @@map("weekly_payments")
+}
+
+model Loan {
+  id              String     @id @default(cuid())
+  userId          String
+  requestedAmount Float
+  approvedAmount  Float?
+  reason          String?
+  interest        Float      @default(0)
+  remaining       Float      @default(0)
+  status          LoanStatus @default(REQUESTED)
+  approvedById    String?
+  approvedAt      DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  user            User       @relation(fields: [userId], references: [id])
+  approvedBy      User?      @relation("LoanApprovedBy", fields: [approvedById], references: [id])
+  repayments      LoanRepayment[]
+
+  @@map("loans")
+}
+
+model LoanRepayment {
+  id        String   @id @default(cuid())
+  loanId    String
+  amount    Float
+  interest  Float
+  paidAt    DateTime @default(now())
+
+  loan      Loan     @relation(fields: [loanId], references: [id])
+
+  @@map("loan_repayments")
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  type        TransactionType
+  amount      Float
+  balance     Float
+  description String
+  reference   String?
+  date        DateTime        @default(now())
+  createdAt   DateTime        @default(now())
+
+  user        User            @relation(fields: [userId], references: [id])
+
+  @@map("transactions")
+}
+
+model Announcement {
+  id        String    @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  likes     Like[]
+
+  @@map("announcements")
+}
+
+model Comment {
+  id             String       @id @default(cuid())
+  announcementId String
+  userId         String
+  message        String
+  createdAt      DateTime     @default(now())
+
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@map("comments")
+}
+
+model Like {
+  id             String       @id @default(cuid())
+  announcementId String
+  userId         String
+
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([announcementId, userId])
+  @@map("likes")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  message   String
+  type      NotificationType @default(GENERAL)
+  read      Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model Settings {
+  id                String   @id @default("global")
+  weeklyAmount      Float    @default(50)
+  fineAmount        Float    @default(10)
+  loanInterestRate  Float    @default(10)
+  loanUnitAmount    Float    @default(500)
+  communityName     String   @default("Sunrise Community")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("settings")
+}
