@@ -131,38 +131,49 @@ Verify Razorpay Signature
 Mark Due as Paid
    ↓
 Create Transaction
+```
 
-
-Automated Reminders
+### Automated Reminders
 
 A scheduled API endpoint can generate weekly payment reminders for active members.
 
 
 
-Technology Stack
+### Technology Stack
+
 ~ Frontend
 ~ Next.js
 ~ React
 ~ TypeScript
 ~ Tailwind CSS
 ~ shadcn/ui
-Backend
+
+### Backend
+
 ~ Next.js API Routes
 ~ Prisma ORM
 ~ PostgreSQL
 ~ Firebase Admin SDK
-Authentication
+
+### Authentication
+
 ~ Firebase Authentication
-Storage
+
+### Storage
+
 ~ Cloudinary
-Payments
+
+### Payments
+
 ~ Razorpay
-Mobile
+
+### Mobile
+
 ~ Capacitor
 ~ Android
 Deployment
 
-Designed for deployment using:
+### Designed for deployment using:
 
 ~ Vercel
 ~ PostgreSQL hosting such as Neon/Supabase/Aiven
@@ -171,8 +182,9 @@ Designed for deployment using:
 ~ Razorpay
 
 
-Project Structure
+## Project Structure
 
+```text
 community_savings/
 │
 ├── app/
@@ -223,13 +235,13 @@ community_savings/
 ├── next.config.ts
 ├── package.json
 └── tsconfig.json
+```
 
-
-Database
+### Database
 
 The application uses PostgreSQL with Prisma.
 
-Main models include:
+### Main models include:
 
 User
 WeeklyPayment
@@ -242,7 +254,7 @@ Like
 Notification
 Settings
 
-The system supports organization-wide settings such as:
+### The system supports organization-wide settings such as:
 
 Weekly contribution: ₹50
 Late fine: ₹10
@@ -252,10 +264,10 @@ Loan interest: ₹10 per ₹500
 These values are configurable through the Settings model.
 
 
-Getting Started
-Requirements
+# Getting Started
+## Requirements
 
-Install:
+### Install:
 
 ~ Node.js
 ~ npm
@@ -264,26 +276,26 @@ Install:
 ~ Cloudinary account
 ~ Razorpay account
 
-For Android development:
+### For Android development:
 
 ~ Android Studio
 ~ Android SDK
 ~ JDK
 ~ Capacitor Android tooling
 
-Installation
+## Installation
 
-Clone the repository:
+### Clone the repository:
 
 git clone https://github.com/arunbharathm01-bit/community_savings.git
 cd community_savings
 
-Install dependencies:
+### Install dependencies:
 
 npm install
 
 
-Environment Variables
+### Environment Variables
 
 Create:
 
@@ -293,6 +305,7 @@ Never commit this file.
 
 Example:
 
+```text
 DATABASE_URL="postgresql://..."
 
 
@@ -319,11 +332,11 @@ NEXT_PUBLIC_RAZORPAY_KEY_ID="..."
 
 
 CRON_SECRET="..."
+```
 
+## Security
 
-Security
-
-Never commit:
+### Never commit:
 
 .env
 .env.local
@@ -337,7 +350,7 @@ Keystores
 APK signing keys
 
 
-Database Setup
+### Database Setup
 
 Generate Prisma Client:
 
@@ -356,7 +369,7 @@ Inspect the database:
 npx prisma studio
 
 
-Development
+### Development
 
 Start the development server:
 
@@ -367,7 +380,7 @@ Open:
 http://localhost:3000
 
 
-Production Build
+### Production Build
 
 Build:
 
@@ -378,15 +391,15 @@ Start:
 npm start
 
 
-Android Application
+## Android Application
 
 The project uses Capacitor to package the web application as an Android application.
 
-Sync the Android project:
+## Sync the Android project:
 
 npx cap sync android
 
-Open Android Studio:
+## Open Android Studio:
 
 npx cap open android
 
@@ -397,10 +410,11 @@ For a production Android application, make sure the application uses a productio
 http://localhost:3000
 
 
-API Overview
+## API Overview
 
-The application contains API routes for:
+### The application contains API routes for:
 
+```text
 /api/auth
 /api/admin
 /api/announcements
@@ -412,17 +426,18 @@ The application contains API routes for:
 /api/notifications
 /api/payments
 /api/transactions
+```
 
 Authentication uses Firebase ID tokens.
 
-Protected API requests use:
+### Protected API requests use:
 
 Authorization: Bearer <firebase-id-token>
 
 Server-side authentication is verified using Firebase Admin.
 
 
-Role-Based Access Control
+### Role-Based Access Control
 
 The application implements role-based access control.
 
@@ -437,7 +452,7 @@ MEMBER
 API authorization is performed server-side rather than relying only on frontend UI restrictions.
 
 
-Development Test Accounts
+### Development Test Accounts
 
 The development seed includes sample accounts for testing.
 
@@ -453,7 +468,7 @@ These accounts are for development/testing only.
 Do not use development credentials in production.
 
 
-Financial Safety
+### Financial Safety
 
 This project is currently intended as a community/project application and should not be considered production-ready financial software without additional security and compliance work.
 
@@ -477,7 +492,7 @@ Applicable Indian financial/legal requirements
 Never trust monetary values supplied directly by the client.
 
 
-Roadmap
+## Roadmap
 Completed / In Development
  Authentication
  Firebase integration
@@ -511,11 +526,11 @@ Planned
  Production security audit
 
 
-Contributing
+## Contributing
 
 This project is primarily developed for a private community savings use case.
 
-For development:
+### For development:
 
 1. Fork the repository.
 2. Create a feature branch.
@@ -526,14 +541,14 @@ For development:
 Do not submit credentials, private keys, database dumps, or real member financial information.
 
 
-License
+### License
 
 This project is currently maintained as a personal/community project.
 
 Add an explicit open-source license before accepting external contributions or redistributing the application.
 
 
-Author
+### Author
 
 Arun
 
